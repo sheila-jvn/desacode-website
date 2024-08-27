@@ -1,0 +1,18 @@
+---
+const {
+  title = "Contact Us",
+} = Astro.props;
+
+interface Props {
+  title?: string;
+}
+---
+
+<div>
+  <a
+    class="inline-flex w-full items-center justify-center gap-x-2 whitespace-nowrap rounded-lg border border-transparent bg-desacode-700 p-3 text-sm font-bold text-neutral-50 outline-none ring-zinc-500 transition duration-300 hover:bg-desacode-800 focus-visible:ring disabled:pointer-events-none disabled:opacity-50 dark:ring-zinc-200 dark:focus:outline-none dark:focus:ring-1 sm:w-auto"
+    href="/contact"
+  >
+    {title}
+  </a>
+</div>

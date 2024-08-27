@@ -1,0 +1,95 @@
+---
+// Importing necessary functions from Astro
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import { determineTagColor } from '../../../helper/bgTagList'
+
+const { product } = Astro.props
+
+interface Props {
+  product: CollectionEntry<'products'>
+}
+---
+
+<style>
+  .card {
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    max-width: 400px;
+    margin: auto;
+  }
+
+  .card img {
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .card .tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: -1rem;
+    padding: 0.5rem;
+    position: relative;
+    z-index: 1;
+    padding-top: 2rem;
+    border-radius: 30px;
+    transform: translateY(-10px)
+  }
+
+  .card .tag {
+    color: #fff;
+    padding: 0.1rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: grid;
+    place-content: center;
+  }
+
+  .card .content {
+    padding: 1rem;
+  }
+
+  .card .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  } 
+
+  .card .description {
+    font-size: 1rem;
+    color: #666;
+  }
+</style>
+
+<div class="card mt-10">
+  <a
+    class="h-50 group grid grid-cols-1 grid-rows-1 overflow-hidden"
+    href={`/services/${product.data.category[0]}/${product.slug}`}
+    ><Image
+      class="col-start-1 row-start-1 transition-transform duration-700 ease-out group-hover:scale-110"
+      src={product.data.main.imgCard}
+      alt=""
+      draggable={'false'}
+    />
+  </a>
+  <div class="tags bg-white w-full rounded-[1rem]">
+    {
+      product.data.taglist.map((tag) => {
+        return <div class:list={['tag', determineTagColor(tag)]}>{tag}</div>
+      })
+    }
+  </div>
+  <div class="content">
+    <div class="title">
+      {product.data.title}
+    </div>
+    <div class="description">
+      {product.data.description}
+    </div>
+  </div>
+</div>

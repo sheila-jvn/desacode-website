@@ -1,0 +1,94 @@
+---
+// Import the necessary dependencies
+import IconBlock from '@components/ui/blocks/IconBlock.astro'
+import Icon from '@components/ui/icons/Icon.astro'
+
+interface Props {
+  src?: any
+  alt?: string
+  reverse?: boolean
+}
+// Define props from Astro
+const { src, alt, reverse } = Astro.props
+
+const features = [
+  {
+    heading: 'Dedicated Teams',
+    content: 'Working with a strong team and prioritizing professionalism.',
+    svg: 'groups'
+  },
+  {
+    heading: 'Comprehensive Documentation',
+    content:
+      'Make investments in research to maintain product high level of competitive advantage.',
+    svg: 'books'
+  },
+  {
+    heading: 'User-Centric Design',
+    content: 'Creating smart solutions to face digitalization challenges.',
+    svg: 'frame'
+  }
+]
+---
+
+<section
+  class:list={[
+    'mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full'
+    // { "text-right": reverse },
+  ]}>
+  <!-- Block to display the feature image -->
+  <!-- <div class="relative mb-6 overflow-hidden md:mb-8">
+    {
+      src && alt && (
+        <Image
+          src={src}
+          alt={alt}
+          class="h-full w-full object-cover object-center"
+          draggable={"false"}
+          format={"avif"}
+          loading={"eager"}
+        />
+      )
+    }
+  </div> -->
+
+  <!-- Displaying the main content consisting of title, subtitle, and several `IconBlock` components -->
+  <div class="mt-5 grid gap-8 lg:mt-16 lg:grid-cols-3 lg:gap-12">
+    <!-- Block for title and subtitle -->
+    <div class:list={['lg:col-span-1', { 'lg:col-start-3': reverse }]}>
+      <!-- Rendering title -->
+      <h2
+        class="text-balance text-2xl font-bold text-desacode-700 dark:text-desacode-600 md:text-3xl">
+        Vision and Mission
+      </h2>
+      <!-- Rendering subtitle -->
+
+      <p
+        class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400 md:mt-4">
+        We are on a mission to drive financial inclusion and empower businesses
+        of all sizes to leverage the power of banking services efficiently. By
+        harnessing the latest advancements in technology, including AI,
+        blockchain, and data analytics, we are reshaping the future of
+        financial Industries.
+      </p>
+    </div>
+
+    <!-- Block to display the IconBlock components -->
+    <div
+      class:list={[
+        'lg:col-span-2',
+        { 'lg:col-start-1 lg:row-start-1': reverse }
+      ]}>
+      <div class="grid gap-8 sm:grid-cols-2 md:gap-12">
+        <!-- Injecting IconBlock components with different properties -->
+        {
+          features.map((feature) => (
+            <IconBlock heading={feature.heading} content={feature.content}>
+              <Icon name={feature.svg} />
+            </IconBlock>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

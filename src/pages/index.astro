@@ -1,0 +1,44 @@
+---
+// Import the necessary components
+import ClientsSection from '@/components/sections/landing/ClientsSection.astro'
+import CardSmallCategory from '@/components/ui/cards/CardSmallCategory.astro'
+import { SITE } from '@/data_files/constants'
+import MainLayout from '@/layouts/MainLayout.astro'
+import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro'
+import HeroSection from '@components/sections/landing/HeroSection.astro'
+import AboutSection from '@components/sections/testimonials/AboutSection.astro'
+import type { CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
+import Card from '@/components/ui/cards/Card.astro'
+
+const product: CollectionEntry<'products'>[] = (
+  await getCollection('products')
+).sort(
+  (a: CollectionEntry<'products'>, b: CollectionEntry<'products'>) =>
+    a.data.main.id - b.data.main.id
+)
+
+const categories = Array.from(
+  new Set(product.map((product) => product.data.category).flat())
+)
+
+const pageTitle: string = `Home | ${SITE.title}`
+---
+
+<MainLayout title={pageTitle}>
+  <HeroSection />
+  <ClientsSection title="Our Partners" subTitle=" " />
+  <AboutSection />
+  <FeaturesGeneral />
+  <h2
+    class="text-balance px-4 py-10 pt-24 text-center text-3xl font-bold text-desacode-700 dark:text-desacode-600 lg:text-4xl">
+    Our Products
+  </h2>
+  <section class="mt-10 flex flex-wrap items-stretch justify-center gap-10">
+    {
+      categories.map((category) => {
+        return <Card category={category} />
+      })
+    }
+  </section>
+</MainLayout>

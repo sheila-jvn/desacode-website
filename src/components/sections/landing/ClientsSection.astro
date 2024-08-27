@@ -1,0 +1,67 @@
+---
+import AMSLogo from '@images/AMS Logo 1.png'; 
+import CyberBeatLogo from '@images/Cyberbeat.png';
+import TIMLogo from '@images/TIM.png';
+import ICTLogo from '@images/ICT.png';
+import DTQLogo from '@images/Logo DTQ.png';
+import AAALogo from '@images/Logo AAA.png';
+import AmoroLogo from '@images/Logo Amoro.png';
+import LJNLogo from '@images/Logo LJN.png';
+import DTTLogo from '@images/Logo DTT.png';
+import SMULogo from '@images/SMU.png';
+import SmartmedicLogo from '@images/smartmedic logo.png';
+import { Image } from 'astro:assets';
+
+// Define props from Astro
+const { title, subTitle } = Astro.props;
+
+// Define TypeScript interface for props
+interface Props {
+  title: string;
+  subTitle?: string;
+}
+---
+
+<section
+  class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
+>
+  <!-- Title and description -->
+  <div class="mx-auto mb-6 w-full space-y-1 text-center sm:w-1/2 lg:w-1/3">
+    <h2
+      class="mb-2 text-3xl font-bold text-desacode-700 dark:text-desacode-700 lg:text-4xl"
+    >
+      {title}
+    </h2>
+    {
+      subTitle && (
+        <p class="text-pretty leading-tight text-neutral-600 dark:text-neutral-400">
+          {subTitle}
+        </p>
+      )
+    }
+  </div>
+  <div
+    class="flex gap-5 flex-wrap items-center justify-between">
+    <!-- Clients Group SVGs -->
+    <!-- First -->
+    <Image src={AMSLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="AMS Logo" />
+    <!-- Second -->
+    <Image src={CyberBeatLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="Cyberbeat Logo" />
+    <!-- Third -->
+    <Image src={TIMLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="TIM Logo" />
+    <!-- Fourth -->
+    <Image src={DTTLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="DTT Logo" />
+    <!-- Fifth -->
+    <Image src={ICTLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="ICT Logo" />
+    <!-- Sixth -->
+    <Image src={DTQLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="DTQ Logo" />
+    <!-- Seventh -->
+    <Image src={AAALogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="AAA Logo" />
+    <!-- Eighth -->
+    <Image src={AmoroLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="Amoro Logo" />
+    <!-- Ninth -->
+    <Image src={LJNLogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="LJN Logo" />
+    <!-- Tenth -->
+    <Image src={SMULogo} class="mx-auto h-auto w-32 py-3 sm:mx-0 lg:w-40 lg:py-5" alt="SMU Logo" />
+  </div>
+</section>

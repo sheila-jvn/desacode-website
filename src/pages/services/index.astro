@@ -1,0 +1,66 @@
+---
+// Importing necessary components
+import CardSmallCategory from '@/components/ui/cards/CardSmallCategory.astro'
+import MainLayout from '@/layouts/MainLayout.astro'
+import FeaturesStatsAlt from '@components/sections/features/FeaturesStatsAlt.astro'
+import Card from '@components/ui/cards/Card.astro'
+
+// Importing necessary functions from Astro
+import { SITE } from '@data/constants'
+import type { CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
+
+// Fetching all the product related content and sorting it by main.id
+const product: CollectionEntry<'products'>[] = (
+  await getCollection('products')
+).sort(
+  (a: CollectionEntry<'products'>, b: CollectionEntry<'products'>) =>
+    a.data.main.id - b.data.main.id
+)
+
+const categories = Array.from(
+  new Set(product.map((product) => product.data.category).flat())
+)
+
+// Define variables for page content
+const title: string = 'Services'
+const subTitle: string =
+  'The transformation of all forms of business processes from traditional business processes to digital processes is increasingly rapid, this change occurs because efficiency, effectiveness, security and level of comfort for customers are things that need to be considered in business development in the digital era. Therefore, we participate in the transformation process by providing the following smart solutions.'
+const pageTitle: string = `Products | ${SITE.title}`
+---
+
+<MainLayout title={pageTitle}>
+  <div
+    class="mx-auto max-w-[85rem] px-4 py-24 sm:px-6 lg:px-8 lg:py-20 2xl:max-w-full">
+    <div class="mb-4 flex items-center justify-center gap-8 sm:mb-8 md:mb-12">
+      <div class="flex flex-col items-center gap-8">
+        <h1
+          class="text-balance text-2xl font-bold tracking-tight text-desacode-700 dark:text-desacode-700 md:text-4xl md:leading-tight">
+          {title}
+        </h1>
+        {
+          subTitle && (
+            <p class="max-w-screen-sm text-pretty text-center text-neutral-600 dark:text-neutral-400 md:block">
+              {subTitle}
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </div>
+  <h1
+    class="text-balance text-center text-2xl font-bold tracking-tight text-desacode-700 dark:text-desacode-700 md:text-4xl md:leading-tight">
+    Our Products
+  </h1>
+  <section class="mt-10 flex flex-wrap items-stretch justify-center gap-10">
+    {
+      categories.map((category) => {
+        return <Card category={category} />
+      })
+    }
+  </section>
+  <FeaturesStatsAlt
+    title="Why Desacode?"
+    subTitle="Desacode participates in changing conventional business processes towards digitalization by utilizing technology which often seems expensive and complicates the business process itself. Our solutions are here to help reduce the costs of effective software development, ensuring the technology worked so well and increased revenue in the business that views on the use of expensive and ineffective software have changed."
+  />
+</MainLayout>

@@ -1,0 +1,135 @@
+---
+// Importing necessary functions from Astro
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { determineTagColor2 } from "../../../helper/bgTagList";
+
+const { category } = Astro.props;
+
+interface Props {
+  category: string;
+}
+
+const product: CollectionEntry<"products">[] = (await getCollection("products"))
+  .filter((product) => product.data.category.includes(category))
+  .sort(
+    (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
+      a.data.main.id - b.data.main.id
+  );
+
+const title: Record<string, string> = {
+  Banking: "Empower Your Bank with Our Cutting-Edge Banking Solutions",
+  Healthcare:
+    "Transform Your Health with Our Revolutionary Healthcare Solution!",
+  Retail: "Revolutionize Your Retail Business with Our Advanced Solutions",
+};
+const subTitle: Record<string, string> = {
+  Banking: "Drive Growth and Innovation in Banking",
+  Healthcare: "Discover the Future of Wellness",
+  Retail: "Unlock the Future of Retail",
+};
+const content: Record<string, string> = {
+  Banking:
+    "Elevate your bank’s capabilities with our state-of-the-art solutions, designed to streamline operations, enhance customer experiences, and drive growth. Our comprehensive suite of banking technologies and services is tailored to meet the unique needs of financial institutions, ensuring you stay ahead in a competitive market.",
+  Healthcare:
+    "Experience the pinnacle of health innovation with our cutting-edge healthcare product, designed to elevate your well-being to new heights. Our comprehensive solution blends advanced technology with user-friendly features, ensuring you stay on top of your health effortlessly.",
+  Retail:
+    "Empower your retail business with cutting-edge solutions designed to streamline operations, enhance customer experiences, and drive growth. Our comprehensive suite of retail technologies and services is tailored to meet the unique demands of the industry, ensuring your business stays competitive and innovative.",
+};
+
+const titles = title[category];
+const contents = content[category];
+const subtitle = subTitle[category];
+---
+
+<style>
+  .card {
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    max-width: 400px;
+    margin-inline: auto;
+    padding-bottom: 1rem;
+    min-height: 100%;
+  }
+
+  .card img {
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .card .tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: -1rem;
+    padding: 0.5rem;
+    position: relative;
+    z-index: 1;
+    padding-top: 2rem;
+    border-radius: 30px;
+    transform: translateY(-10px);
+  }
+
+  .card .tag {
+    color: #fff;
+    padding: 0.1rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: grid;
+    place-content: center;
+  }
+
+  .card .content {
+    padding: 1rem;
+  }
+
+  .card .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .card .description {
+    font-size: 1rem;
+    color: #666;
+  }
+</style>
+
+<div class="card">
+  <a
+    class="h-50 group grid grid-cols-1 grid-rows-1 overflow-hidden"
+    href={`/services/${category}`}
+    ><img
+      class="col-start-1 row-start-1 transition-transform duration-700 ease-out group-hover:scale-110"
+      src={`/${category}.webp`}
+      alt=""
+      draggable={"false"}
+    />
+    <!-- <span
+      class="relative z-10 col-start-1 row-start-1 text-sm font-bold text-neutral-50 md:text-lg"
+      >{category}</span
+    > -->
+  </a>
+  <div class="tags w-full rounded-[1rem] bg-white">
+    {
+      product.map((product) => {
+        return (
+          <a
+            href={`/services/${product.data.category[0]}/${product.slug}`}
+            class:list={["tag", determineTagColor2(product.data.title)]}
+          >
+            {product.data.title}
+          </a>
+        );
+      })
+    }
+  </div>
+  <div class="content">
+    <div class="title">{titles}</div>
+    <div class="description">{contents}</div>
+  </div>
+</div>

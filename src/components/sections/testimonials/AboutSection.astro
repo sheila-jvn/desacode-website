@@ -1,0 +1,41 @@
+---
+import IconDC from "@images/icon.png";
+import { Image } from "astro:assets";
+---
+
+<section
+  class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
+>
+  <!-- Yang section atas cuekin aja -->
+  <!-- Container for the testimonials -->
+  <div
+    class="flex flex-col items-center justify-center gap-32 lg:flex-row"
+  >
+    <!-- Image -->
+    <Image
+      src={IconDC}
+      alt="logo"
+      class="h-auto w-[300px] -h-[400px] items-center object-cover object-center hidden md:block"
+      draggable={"false"}
+      loading={"eager"}
+      format={"avif"}
+    />
+
+    <!-- Title and Subtitle -->
+    <div class="max-w-[]">
+      <h2
+        class="mb-2 text-3xl font-bold text-desacode-700 dark:text-desacode-700 lg:text-4xl"
+      >
+        About Us
+      </h2>
+
+      <p class="text-neutral-600 dark:text-neutral-400">
+        DesaCode is driven by a vision to democratize access to financial
+        services, particularly in underserved communities across Indonesia.
+        Through our comprehensive suite of BaaS solutions, we enable banks and
+        financial institutions to streamline operations, enhance customer
+        experiences, and expand their reach.
+      </p>
+    </div>
+  </div>
+</section>

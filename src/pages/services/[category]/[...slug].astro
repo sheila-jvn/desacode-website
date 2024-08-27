@@ -1,0 +1,402 @@
+---
+// Import section components
+import MainLayout from '@/layouts/MainLayout.astro'
+import ProductTabBtn from '@components/ui/buttons/ProductTabBtn.astro'
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro'
+import { Image } from 'astro:assets'
+import { getCollection } from 'astro:content'
+import { SITE } from '@data/constants'
+import { Icon } from 'astro-icon/components'
+import type { ImageMetadata } from 'astro'
+
+// Global declaration for gsap animation library
+declare global {
+  interface Window {
+    gsap: any
+  }
+}
+// This gets the static paths for all the unique products
+export async function getStaticPaths() {
+  const productEntries = await getCollection('products')
+
+  return productEntries
+    .map((product) => {
+      return product.data.category.map((category) => {
+        return {
+          params: { category, slug: product.slug },
+          props: { product }
+        }
+      })
+    })
+    .flat()
+}
+
+const { product } = Astro.props
+
+const pageTitle: string = `${product.data.title} | ${SITE.title}`
+let containerClass = ''
+let imageClass = ''
+let imageWidth = ''
+if (product.data.heroLayout === 'right') {
+  containerClass = 'flex-col-reverse sm:flex-row-reverse'
+  imageClass = 'relative left-[-2rem] md:left-[-4rem] top-[-1.5rem]'
+} else if (product.data.heroLayout === 'left') {
+  containerClass = 'flex-col sm:flex-row'
+  imageClass = 'relative right-[-4rem] md:right-[-4rem] sm:top-[-1rem] top-[1rem]'
+}
+
+if (product.data.title === 'DesaPOS') {
+  imageWidth = 'w-[800px]'
+} else {
+  imageWidth = 'w-[600px]'
+}
+
+console.log('product.data.featureImage', product.data.featureImage)
+---
+
+<MainLayout title={pageTitle}>
+  <div id="overlay" class="fixed inset-0 bg-neutral-200 dark:bg-neutral-800">
+  </div>
+
+  <section
+    class="mx-auto flex max-w-[85rem] flex-col px-4 py-24 sm:px-6 lg:px-8 lg:py-20 2xl:max-w-full">
+    <div
+      class:list={[
+        'flex justify-between space-y-4 sm:space-y-0',
+        containerClass
+      ]}>
+      <div id="fadeInUp">
+        <p
+          id="fadeText"
+          class="mb-8 max-w-prose text-pretty font-light text-neutral-700 dark:text-neutral-300 sm:text-xl">
+          {product.data.main.content}
+        </p>
+        <h1
+          class="block text-4xl font-bold tracking-tighter text-neutral-800 dark:text-neutral-200 sm:text-5xl md:text-6xl lg:text-7xl">
+          {product.data.title}
+        </h1>
+        <p class="text-lg text-neutral-600 dark:text-neutral-400">
+          {product.data.description}
+        </p>
+
+        {
+          product.data.main.downloadUrl && (
+            <p class="mt-5">
+              <PrimaryCTA
+                title="Download Brochure"
+                url={product.data.main.downloadUrl}
+              />
+            </p>
+          )
+        }
+      </div>
+      <div>
+        <Image
+          id="fadeInMoveRight"
+          src={product.data.main.imgMain}
+          class:list={[imageWidth, imageClass]}
+          alt={product.data.main.imgAlt}
+          format={'png'}
+          loading={'eager'}
+        />
+      </div>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
+    <nav
+      class="mx-auto grid max-w-6xl gap-y-px sm:flex sm:gap-x-4 sm:gap-y-0"
+      aria-label="Tabs"
+      role="tablist">
+      {
+        product.data.tabs.map((tab, index) => (
+          <ProductTabBtn
+            title={tab.title}
+            id={tab.id}
+            dataTab={tab.dataTab}
+            first={index === 0}
+          />
+        ))
+      }
+    </nav>
+
+    <div class="mt-12 md:mt-16">
+      <div id="tabs-with-card-1" role="tabpanel">
+        <div class="mx-auto max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14">
+          <div class="grid gap-12 md:grid-cols-2">
+            <div class="lg:w-3/4">
+              <h2
+                class="text-balance text-3xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200 md:leading-tight lg:text-4xl">
+                {product.data.longDescription.title}
+              </h2>
+              <p
+                class="mt-3 text-pretty text-neutral-600 dark:text-neutral-400">
+                {product.data.longDescription.subTitle}
+              </p>
+              <p class="mt-5">
+                <PrimaryCTA
+                  title={product.data.longDescription.btnTitle}
+                  url={product.data.longDescription.btnURL}
+                />
+              </p>
+              <Image
+                id="fadeInMoveRight"
+                src={product.data.longDescription.bottomImage}
+                class="mt-20 w-[600px]"
+                alt=""
+                format={'avif'}
+                loading={'eager'}
+              />
+            </div>
+
+            <div class="space-y-6 lg:space-y-10">
+              {
+                product.data.descriptionList.map((list) => (
+                  <div class="flex">
+                    <div>
+                      <h3 class="text-base font-bold text-neutral-800 dark:text-neutral-200 sm:text-lg">
+                        {list.title}
+                      </h3>
+                      <p class="mt-1 text-neutral-600 dark:text-neutral-400">
+                        <span class="whitespace-pre-wrap">{list.subTitle}</span>
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabs-with-card-2" class="hidden" role="tabpanel">
+        <div class="mx-auto max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14">
+          <div class="grid w-full grid-cols-1 gap-x-16 md:grid-cols-2">
+            <div class="max-w-md space-y-6">
+              {
+                product.data.specificationsLeft.map((spec) => (
+                  <div class="grid grid-cols-[auto,1fr]">
+                    {/* <Icon name={spec.icon} class="mt-1 w-[50px]" /> */}
+                    <div class="flex flex-col">
+                      <h3 class="block font-bold text-neutral-800 dark:text-neutral-200">
+                        {spec.title}
+                      </h3>
+                      <p class="text-neutral-600 dark:text-neutral-400">
+                        <span class="whitespace-pre-wrap">{spec.subTitle}</span>
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            {
+              product.data.specificationsRight ? (
+                <div class="mt-6 max-w-md space-y-6 md:ml-auto md:mt-0">
+                  {product.data.specificationsRight?.map((spec) => (
+                    <div class="grid grid-cols-[auto,1fr]">
+                      {/* <Icon name={spec.icon} class="mt-1 w-[50px]" /> */}
+                      <div class="flex flex-col">
+                        <h3 class="block font-bold text-neutral-800 dark:text-neutral-200">
+                          {spec.title}
+                        </h3>
+                        <p class="text-neutral-600 dark:text-neutral-400">
+                          {spec.subTitle}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  {product.data.featureImage && (
+                    <Image
+                      src={product.data.featureImage as ImageMetadata}
+                      alt=""
+                    />
+                  )}
+                </div>
+              ) : product.data.tableData ? (
+                <div class="mt-6 space-y-6 md:ml-auto md:mt-0">
+                  <div class="flex flex-col">
+                    <div class="-m-1.5 overflow-x-auto">
+                      <div class="inline-block min-w-full p-1.5 align-middle">
+                        <div class="overflow-hidden">
+                          <table class="min-w-full divide-y divide-neutral-300 dark:divide-neutral-700">
+                            <thead>
+                              <tr>
+                                {product.data.tableData?.[0].feature?.map(
+                                  (header) => (
+                                    <th
+                                      scope="col"
+                                      class="px-6 py-3 text-start text-xs font-medium uppercase text-neutral-500 dark:text-neutral-500">
+                                      {header}
+                                    </th>
+                                  )
+                                )}
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
+                              {product.data.tableData?.map((row) =>
+                                // Wrap each row's content in a separate <tr> element
+                                row.description.map((rowData) => (
+                                  <tr>
+                                    {/* Iterate through each cell value in the row's description array */}
+                                    {rowData.map((cellValue) => (
+                                      // Render each cell value in its own <td> element
+                                      <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                                        {cellValue}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tabs-with-card-3" class="hidden" role="tabpanel">
+    <div class="mx-auto mb-20 flex w-full md:mb-28 2xl:w-4/5">
+      <div
+        class="relative left-12 top-12 z-10 overflow-hidden rounded-xl shadow-lg md:left-12 md:top-16 md:-ml-12 lg:ml-0">
+        {
+          product.data.blueprints?.first && (
+            <Image
+              src={product.data.blueprints.first}
+              class="h-full w-full object-cover object-center"
+              alt="Blueprint Illustration"
+              format={'avif'}
+            />
+          )
+        }
+      </div>
+
+      <div class="relative right-12 overflow-hidden rounded-xl shadow-xl">
+        {
+          product.data.blueprints?.second && (
+            <Image
+              src={product.data.blueprints.second}
+              class="h-full w-full object-cover object-center"
+              alt="Blueprint Illustration"
+              format={'avif'}
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+</MainLayout>
+<script is:inline src="/scripts/vendor/gsap/gsap.min.js"></script><script>
+  window.addEventListener('load', () => {
+    if (window.gsap) {
+      const gsap = window.gsap
+
+      gsap.set('#fadeText', {
+        autoAlpha: 1, // Set autoAlpha to 1 to make it fully visible
+        y: 0, // Set y to 0 to reset any vertical translation
+        willChange: 'transform, opacity'
+      })
+      gsap.set('#fadeInUp', {
+        autoAlpha: 1, // Set autoAlpha to 1 to make it fully visible
+        y: 0, // Set y to 0 to reset any vertical translation
+        willChange: 'transform, opacity'
+      })
+      gsap.set('#fadeInMoveRight', {
+        autoAlpha: 1, // Set autoAlpha to 1 to make it fully visible
+        x: 0, // Set x to 0 to reset any horizontal translation
+        willChange: 'transform, opacity'
+      })
+
+      gsap.set('#overlay', { autoAlpha: 0 }) // Set autoAlpha to 0 to hide the overlay immediately
+    }
+  })
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function setButtonInactive(btn: any, activeButton: any) {
+      if (btn !== activeButton) {
+        btn.classList.remove(
+          'active',
+          'bg-neutral-100',
+          'hover:border-transparent',
+          'dark:bg-white/[.05]'
+        )
+
+        const tabId = btn.getAttribute('data-target')
+        if (tabId) {
+          const contentElement = document.querySelector(tabId)
+          if (contentElement) {
+            contentElement.classList.add('hidden')
+          }
+        }
+
+        changeHeadingStyle(
+          btn,
+          ['text-neutral-800', 'dark:text-neutral-200'],
+          ['text-desacode-400', 'dark:text-desacode-300']
+        )
+      }
+    }
+
+    function activateButton(button: any) {
+      button.classList.add(
+        'active',
+        'bg-neutral-100',
+        ',hover:border-transparent',
+        'dark:bg-white/[.05]'
+      )
+
+      const tabId = button.getAttribute('data-target')
+      if (tabId) {
+        const contentElementToShow = document.querySelector(tabId)
+        if (contentElementToShow) {
+          contentElementToShow.classList.remove('hidden')
+        }
+      }
+
+      changeHeadingStyle(
+        button,
+        ['text-desacode-400', 'dark:text-desacode-300'],
+        ['text-neutral-800', 'dark:text-neutral-200']
+      )
+    }
+
+    function changeHeadingStyle(
+      button: any,
+      addClasses: any,
+      removeClasses: any
+    ) {
+      let heading = button.querySelector('span')
+      if (heading) {
+        heading.classList.remove(...removeClasses)
+        heading.classList.add(...addClasses)
+      }
+    }
+
+    const tabButtons = document.querySelectorAll('[data-target]')
+
+    if (tabButtons.length > 0) {
+      changeHeadingStyle(
+        tabButtons[0],
+        ['text-orange-400', 'dark:text-orange-300'],
+        []
+      )
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach((btn) => setButtonInactive(btn, button))
+        activateButton(button)
+      })
+    })
+  })
+</script>
