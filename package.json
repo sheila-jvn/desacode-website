@@ -21,7 +21,7 @@
     "@iconify-json/mdi": "^1.1.66",
     "astro": "^4.8.3",
     "astro-compressor": "^0.4.1",
-    "globby": "^14.0.1",
+    "globby": "^14.0.2",
     "gsap": "^3.12.5",
     "html-minifier": "^4.0.0",
     "preline": "^2.1.0",
